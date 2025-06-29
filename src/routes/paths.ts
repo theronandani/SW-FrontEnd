@@ -19,6 +19,7 @@ export default {
     setavailabilty: `/${rootPaths.authRoot}/setavailabilty`,
     assignedclients: `/${rootPaths.authRoot}/assignedclients`,
     sessionreport:  `/${rootPaths.authRoot}/sessionreport`,
+    applications: `/${rootPaths.authRoot}/applications`,
 
   404: `/${rootPaths.errorRoot}/404`,
 };

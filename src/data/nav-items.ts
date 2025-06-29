@@ -68,22 +68,6 @@ const navItems: NavItem[] = [
     ],
   },
 
-    {
-    title: 'Applications',
-    path: '#!',
-    icon: 'mingcute:grid-fill',
-    active: true,
-    collapsible: false,
-
-    sublist: [
-      { 
-         title: 'All  Applications',
-        path: 'login',
-        active: true,
-        collapsible: false,
-      },
-    ],
-  },
    {
     title: 'Sessions',
     path: 'authentication',
@@ -100,6 +84,22 @@ const navItems: NavItem[] = [
       },
     ],
 
+  },
+  {
+    title: 'Applications',
+    path: 'authentication',
+    icon: 'mingcute:grid-fill',
+    active: true,
+    collapsible: true,
+
+    sublist: [
+      { 
+         title: 'All  Applications',
+        path: 'applications',
+        active: true,
+        collapsible: false,
+      },
+    ],
   },
   {
     title: 'Notification',

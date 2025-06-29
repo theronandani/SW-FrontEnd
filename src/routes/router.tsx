@@ -8,6 +8,7 @@ import Splash from 'components/loading/Splash';
 import SetAvailability from 'pages/authentication/SetAvailability';
 import AssignedClients from 'pages/authentication/AssignedClients';
 import Session from 'pages/authentication/Session';
+import App_Applications from 'pages/authentication/App_Applications';
 
 const App = lazy(() => import('App'));
 const MainLayout = lazy(async () => {
@@ -97,6 +98,10 @@ const routes: RouteObject[] = [
           {
             path: paths.sessionreport,
             element: <Session/>,
+          },
+          {
+            path: paths.applications,
+            element: <App_Applications/>,
           },
         ],
       },
