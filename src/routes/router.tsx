@@ -5,6 +5,9 @@ import paths, { rootPaths } from './paths';
 
 import PageLoader from '../components/loading/PageLoader';
 import Splash from 'components/loading/Splash';
+import SetAvailability from 'pages/authentication/SetAvailability';
+import AssignedClients from 'pages/authentication/AssignedClients';
+import Session from 'pages/authentication/Session';
 
 const App = lazy(() => import('App'));
 const MainLayout = lazy(async () => {
@@ -33,13 +36,9 @@ const Sales = lazy(async () => {
 });
 
 const Login = lazy(async () => import('pages/authentication/Login'));
-const SignUp = lazy(async () => import('pages/authentication/SignUp'));
 
 const ResetPassword = lazy(async () => import('pages/authentication/ResetPassword'));
 const ForgotPassword = lazy(async () => import('pages/authentication/ForgotPassword'));
-
-const AddSocialWorker = lazy(async () => import('pages/authentication/AddSocialWorker'));
-const AddClient = lazy(async () => import('pages/authentication/AddClient')); 
 
 const routes: RouteObject[] = [
   {
@@ -80,10 +79,6 @@ const routes: RouteObject[] = [
             element: <Login />,
           },
           {
-            path: paths.signup,
-            element: <SignUp />,
-          },
-          {
             path: paths.resetPassword,
             element: <ResetPassword />,
           },
@@ -92,12 +87,16 @@ const routes: RouteObject[] = [
             element: <ForgotPassword />,
           },
           {
-            path: paths.addsocialworker,
-            element: <AddSocialWorker />,
+            path: paths.setavailabilty,
+            element: <SetAvailability/>
           },
           {
-            path: paths.addclient,
-            element: <AddClient />,
+            path: paths.assignedclients,
+            element: <AssignedClients/>,
+          },
+          {
+            path: paths.sessionreport,
+            element: <Session/>,
           },
         ],
       },

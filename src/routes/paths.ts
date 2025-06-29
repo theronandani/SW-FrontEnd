@@ -12,12 +12,13 @@ export const rootPaths = {
 
 export default {
   home: `/${rootPaths.homeRoot}`,
-  addsocialworker: `/${rootPaths.authRoot}/addsocialworker`,
-  addclient: `/${rootPaths.authRoot}/addclient`,
   login: `/${rootPaths.authRoot}/login`,
-  signup: `/${rootPaths.authRoot}/sign-up`,
   resetPassword: `/${rootPaths.authRoot}/reset-password`,
   forgotPassword: `/${rootPaths.authRoot}/forgot-password`,
+
+    setavailabilty: `/${rootPaths.authRoot}/setavailabilty`,
+    assignedclients: `/${rootPaths.authRoot}/assignedclients`,
+    sessionreport:  `/${rootPaths.authRoot}/sessionreport`,
 
   404: `/${rootPaths.errorRoot}/404`,
 };
