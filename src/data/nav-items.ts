@@ -34,29 +34,18 @@ const navItems: NavItem[] = [
 
   {
     title: 'View Assigned Clients',
-    path: '#!',
+    path: 'authentication',
     icon: 'icomoon-free:drawer',
     active: true,
-    collapsible: false,
+    collapsible: true,
     sublist: [
       {
-        title: 'Profile',
-        path: '#!',
+        title: 'List',
+        path: 'assignedclients',
         active: false,
         collapsible: false,
         sublist: [
-          {
-            title: 'Overview',
-            path: '#!',
-            active: false,
-            collapsible: false,
-          },
-          {
-            title: 'All Projects',
-            path: '#!',
-            active: false,
-            collapsible: false,
-          },
+         
         ],
       },
       
@@ -71,7 +60,7 @@ const navItems: NavItem[] = [
     sublist: [
       {
         title: 'Schedule input',
-        path: '#!',
+        path: 'setavailabilty',
         active: true,
         collapsible: false,
       },
@@ -101,6 +90,16 @@ const navItems: NavItem[] = [
     icon: 'f7:exclamationmark-shield-fill',
     active: true,
     collapsible: true,
+
+    sublist: [
+      { 
+         title: 'Reports',
+        path: 'sessionreport',
+        active: true,
+        collapsible: false,
+      },
+    ],
+
   },
   {
     title: 'Notification',
