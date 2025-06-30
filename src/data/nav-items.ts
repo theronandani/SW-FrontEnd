@@ -25,7 +25,7 @@ const navItems: NavItem[] = [
     sublist: [
       {
         title: 'Client Stats',
-        path: 'login',
+        path: '#!',
         active: true,
         collapsible: false,
       },

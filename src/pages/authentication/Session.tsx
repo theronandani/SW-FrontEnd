@@ -215,9 +215,7 @@ const Session: React.FC = () => {
         <Button variant="outlined" color="secondary" onClick={handleExportPDF}>
           Export All Sessions as PDF
         </Button>
-        <Button variant="contained" color="success" onClick={handleApplyForRehab}>
-          Apply for Rehab
-        </Button>
+        
       </Box>
 
       {/* Snackbar */}

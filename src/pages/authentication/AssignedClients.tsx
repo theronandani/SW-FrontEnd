@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+
+import React, { useState, ChangeEvent } from 'react';
 import {
   Box,
   Button,
@@ -8,6 +9,8 @@ import {
   List,
   TextField,
   Typography,
+  Snackbar,
+  Alert,
 } from '@mui/material';
 
 interface Client {
@@ -29,26 +32,26 @@ const initialClients: Client[] = [
     id: '1',
     fileNumber: 'FN001',
     idNumber: '9001011234567',
-    name: 'John',
-    surname: 'Doe',
+    name: 'Andani',
+    surname: 'Theron',
     age: 25,
     gender: 'Male',
-    suburb: 'Hillbrow',
-    nextOfKin: 'Jane Doe',
-    nextOfKinPhone: '123-456-7890',
+    suburb: 'Orlando east',
+    nextOfKin: 'Tshivhenga Mulaudzi',
+    nextOfKinPhone: '082-456-7890',
     substances: 'Alcohol, Marijuana',
   },
   {
     id: '2',
     fileNumber: 'FN002',
     idNumber: '8505057654321',
-    name: 'Mary',
-    surname: 'Smith',
+    name: 'Zach',
+    surname: 'Mzi',
     age: 30,
-    gender: 'Female',
-    suburb: 'Soweto',
-    nextOfKin: 'Tom Smith',
-    nextOfKinPhone: '987-654-3210',
+    gender: 'Male',
+    suburb: 'Chiawela',
+    nextOfKin: 'Sizwe Mageba',
+    nextOfKinPhone: '061-654-3210',
     substances: 'Methamphetamine',
   },
 ];
@@ -57,22 +60,46 @@ const AssignedClients: React.FC = () => {
   const [clients, setClients] = useState<Client[]>(initialClients);
   const [selectedClient, setSelectedClient] = useState<Client | null>(null);
   const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [pdfFiles, setPdfFiles] = useState<File[]>([]);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
 
   const handleSelectClient = (client: Client) => {
     setSelectedClient(client);
     setIsEditing(false);
+    setPdfFiles([]);
   };
 
-  const handleInputChange = (
-    field: keyof Client,
-    value: string | number
-  ) => {
+  const handleInputChange = (field: keyof Client, value: string | number) => {
     if (selectedClient) {
       setSelectedClient({
         ...selectedClient,
         [field]: value,
       });
     }
+  };
+
+  const handleFilesChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files) {
+      const selectedFiles = Array.from(files).filter(
+        (file) => file.type === 'application/pdf'
+      );
+      if (selectedFiles.length > 0) {
+        setPdfFiles(selectedFiles);
+      } else {
+        alert('Please select valid PDF files only.');
+      }
+    }
+  };
+
+  const handleOpenSnackbar = (message: string) => {
+    setSnackbarMessage(message);
+    setOpenSnackbar(true);
+  };
+
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
   };
 
   const handleSave = () => {
@@ -82,7 +109,7 @@ const AssignedClients: React.FC = () => {
           client.id === selectedClient.id ? selectedClient : client
         )
       );
-      alert('Client details updated successfully!');
+      handleOpenSnackbar('Client details updated successfully!');
       setIsEditing(false);
     }
   };
@@ -95,6 +122,20 @@ const AssignedClients: React.FC = () => {
       setSelectedClient(originalClient);
     }
     setIsEditing(false);
+    setPdfFiles([]);
+  };
+
+  const handleApplyForRehab = () => {
+    if (pdfFiles.length > 0) {
+      console.log('Applying for rehab for:', selectedClient?.name);
+      pdfFiles.forEach((file) => {
+        console.log('Uploading file:', file.name);
+      });
+      handleOpenSnackbar(`Rehab application submitted with ${pdfFiles.length} document(s).`);
+      setPdfFiles([]);
+    } else {
+      alert('Please upload at least one PDF document before applying.');
+    }
   };
 
   const getTextFieldProps = () => {
@@ -126,7 +167,9 @@ const AssignedClients: React.FC = () => {
               },
             }}
           >
-            <Typography variant="h6">{client.name} {client.surname}</Typography>
+            <Typography variant="h6">
+              {client.name} {client.surname}
+            </Typography>
             <Typography variant="body2" color="text.secondary">
               File Number: {client.fileNumber}
             </Typography>
@@ -251,32 +294,66 @@ const AssignedClients: React.FC = () => {
             </Grid>
           </Grid>
 
-          {/* Substances */}
+          {/* Substances and PDF Upload */}
           <Typography variant="subtitle1" sx={{ mt: 4, mb: 1 }}>
             Substances Used
           </Typography>
           <Divider sx={{ mb: 2 }} />
 
-          <TextField
-            label="Substances"
-            value={selectedClient.substances}
-            onChange={(e) => handleInputChange('substances', e.target.value)}
-            fullWidth
-            multiline
-            rows={3}
-            {...getTextFieldProps()}
-          />
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Substances"
+                value={selectedClient.substances}
+                onChange={(e) => handleInputChange('substances', e.target.value)}
+                fullWidth
+                multiline
+                rows={3}
+                {...getTextFieldProps()}
+              />
+            </Grid>
+
+            <Grid item xs={12} sm={6}>
+              <Typography variant="subtitle2" sx={{ mb: 1 }}>
+                Upload Rehab Documents (PDFs)
+              </Typography>
+              <input
+                type="file"
+                accept="application/pdf"
+                multiple
+                onChange={handleFilesChange}
+              />
+              {pdfFiles.length > 0 && (
+                <Box sx={{ mt: 1 }}>
+                  {pdfFiles.map((file, index) => (
+                    <Typography key={index} variant="body2" color="success.main">
+                      {file.name}
+                    </Typography>
+                  ))}
+                </Box>
+              )}
+            </Grid>
+          </Grid>
 
           {/* Buttons */}
           <Box sx={{ mt: 3, display: 'flex', gap: 2 }}>
             {!isEditing ? (
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => setIsEditing(true)}
-              >
-                Edit
-              </Button>
+              <>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => setIsEditing(true)}
+                >
+                  Edit
+                </Button>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={handleApplyForRehab}
+                >
+                  Apply for Rehab
+                </Button>
+              </>
             ) : (
               <>
                 <Button
@@ -298,6 +375,22 @@ const AssignedClients: React.FC = () => {
           </Box>
         </Card>
       )}
+
+      {/* Snackbar */}
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={3000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity="success"
+          sx={{ width: '100%' }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };
