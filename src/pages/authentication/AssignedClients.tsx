@@ -1,4 +1,3 @@
-
 import React, { useState, ChangeEvent } from 'react';
 import {
   Box,
@@ -12,6 +11,7 @@ import {
   Snackbar,
   Alert,
 } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 interface Client {
   id: string;
@@ -63,6 +63,8 @@ const AssignedClients: React.FC = () => {
   const [pdfFiles, setPdfFiles] = useState<File[]>([]);
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
+
+  const navigate = useNavigate();
 
   const handleSelectClient = (client: Client) => {
     setSelectedClient(client);
@@ -131,7 +133,9 @@ const AssignedClients: React.FC = () => {
       pdfFiles.forEach((file) => {
         console.log('Uploading file:', file.name);
       });
-      handleOpenSnackbar(`Rehab application submitted with ${pdfFiles.length} document(s).`);
+      handleOpenSnackbar(
+        `Rehab application submitted with ${pdfFiles.length} document(s).`
+      );
       setPdfFiles([]);
     } else {
       alert('Please upload at least one PDF document before applying.');
@@ -305,7 +309,9 @@ const AssignedClients: React.FC = () => {
               <TextField
                 label="Substances"
                 value={selectedClient.substances}
-                onChange={(e) => handleInputChange('substances', e.target.value)}
+                onChange={(e) =>
+                  handleInputChange('substances', e.target.value)
+                }
                 fullWidth
                 multiline
                 rows={3}
@@ -345,6 +351,15 @@ const AssignedClients: React.FC = () => {
                   onClick={() => setIsEditing(true)}
                 >
                   Edit
+                </Button>
+                <Button
+                  variant="contained"
+                  color="info"
+                  onClick={() =>
+                    navigate('/session', { state: { client: selectedClient } })
+                  }
+                >
+                  Session
                 </Button>
                 <Button
                   variant="contained"

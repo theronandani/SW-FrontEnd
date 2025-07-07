@@ -11,6 +11,7 @@ import {
   Alert,
 } from '@mui/material';
 import { jsPDF } from 'jspdf';
+import { useLocation } from 'react-router-dom';
 
 interface SessionNote {
   date: string;
@@ -29,6 +30,9 @@ const initialSessions: SessionNote[] = [
 ];
 
 const Session: React.FC = () => {
+  const location = useLocation();
+  const client = location.state?.client;
+
   const [sessions, setSessions] = useState<SessionNote[]>(initialSessions);
   const [newSessionContent, setNewSessionContent] = useState<string>('');
   const [newSessionDate, setNewSessionDate] = useState<string>('');
@@ -82,23 +86,18 @@ const Session: React.FC = () => {
     let yPos = 30;
     sessions.forEach((session, index) => {
       doc.setFontSize(12);
-      doc.text(
-        `${index + 1}. Date: ${session.date}\nNotes: ${session.content}`,
-        20,
-        yPos
-      );
-      yPos += 20;
+      const sessionText = `${index + 1}. Date: ${session.date}\nNotes: ${session.content}`;
+      const lines = doc.splitTextToSize(sessionText, 170);
+      doc.text(lines, 20, yPos);
+      yPos += lines.length * 10;
+
       if (yPos > 270) {
         doc.addPage();
         yPos = 20;
       }
     });
 
-    doc.save('Client_Sessions.pdf');
-  };
-
-  const handleApplyForRehab = () => {
-    showSnackbar('Applied for Rehab successfully!');
+    doc.save(`Sessions_${client?.name || 'Client'}.pdf`);
   };
 
   return (
@@ -106,6 +105,12 @@ const Session: React.FC = () => {
       <Typography variant="h4" gutterBottom>
         Client Sessions
       </Typography>
+
+      {client && (
+        <Typography variant="h6" sx={{ mb: 2 }}>
+          Sessions for {client.name} {client.surname}
+        </Typography>
+      )}
 
       {/* Write New Session */}
       <Card sx={{ p: 3, mb: 4, boxShadow: 3 }}>
@@ -210,12 +215,11 @@ const Session: React.FC = () => {
         )}
       </Card>
 
-      {/* Export and Apply Buttons */}
+      {/* Export Button */}
       <Box sx={{ display: 'flex', gap: 2 }}>
         <Button variant="outlined" color="secondary" onClick={handleExportPDF}>
           Export All Sessions as PDF
         </Button>
-        
       </Box>
 
       {/* Snackbar */}
